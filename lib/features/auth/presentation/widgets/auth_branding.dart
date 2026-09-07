@@ -23,7 +23,7 @@ class AuthBranding extends StatelessWidget {
             color: AppColors.primary,
             borderRadius: BorderRadius.circular(AppRadius.md),
           ),
-          child: const Icon(Icons.check_rounded, color: Colors.white, size: 28),
+          child: const Icon(Icons.check_rounded, color: AppColors.white, size: 28),
         ),
         const SizedBox(width: AppSpacing.md),
         Expanded(

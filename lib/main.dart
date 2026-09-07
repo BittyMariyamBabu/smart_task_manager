@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager/core/theme/app_theme.dart';
 import 'package:task_manager/features/auth/presentation/pages/login_page.dart';
+import 'package:task_manager/features/onboarding/presentation/pages/onboarding_page.dart';
 
 Future<void> main() async {
   // Ensure that the Flutter framework is initialized before running the app
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
 
       themeMode: ThemeMode.system,
 
-      home: const LoginPage(),
+      home: OnboardingPage(),
     );
   }
 }
