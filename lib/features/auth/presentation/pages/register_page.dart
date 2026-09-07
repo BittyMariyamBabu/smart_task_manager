@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:task_manager/core/theme/app_spacing.dart';
 import 'package:task_manager/core/validators/app_validators.dart';
+import 'package:task_manager/features/auth/presentation/providers/auth_providers.dart';
 import 'package:task_manager/features/auth/presentation/widgets/auth_bottom.dart';
 import 'package:task_manager/features/auth/presentation/widgets/auth_branding.dart';
 import 'package:task_manager/features/auth/presentation/widgets/auth_button.dart';
@@ -9,6 +10,7 @@ import 'package:task_manager/features/auth/presentation/widgets/auth_heading.dar
 import 'package:task_manager/features/auth/presentation/widgets/auth_layout.dart';
 import 'package:task_manager/features/auth/presentation/widgets/auth_text_field.dart';
 import 'package:task_manager/features/auth/presentation/widgets/terms_checkbox.dart';
+import 'package:task_manager/widgets/app_snackbar.dart';
 
 
 /// A registration page for the Smart Task Manager application.
@@ -33,7 +35,6 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
   bool _acceptedTerms = false;
-  bool _isLoading = false;
 
   @override
   /// Disposes of the controllers when the widget is removed from the widget tree.
@@ -46,14 +47,53 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   }
 
   /// Handles the registration action when the user presses the registration button.
-    Future<void> _register() async {
-    if (!_acceptedTerms || !(_formKey.currentState?.validate() ?? false)) {
+  Future<void> _register() async {
+    if (!(_formKey.currentState?.validate() ?? false)) {
       return;
     }
+
+    if (!_acceptedTerms) {
+    AppSnackbar.error(
+      context,
+      'Please accept the Terms & Conditions.',
+    );
+    return;
+  }
+
+    await ref.read(authControllerProvider.notifier).register(
+      name: _nameController.text.trim(),
+      email: _emailController.text.trim(),
+      password: _passwordController.text,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    // Listen to the authentication controller state to handle loading and error states.
+    ref.listen<AsyncValue<void>>(
+      authControllerProvider,
+      (previous, next) {
+        // Error
+        if (next.hasError && !next.isLoading) {
+          AppSnackbar.error(
+            context,
+            next.error.toString(),
+          );
+          return;
+        }
+        
+        // Success
+        if (previous?.isLoading == true && next.hasValue) {
+          AppSnackbar.success(
+            context,
+            'Sign up successful. You can now log in.',
+          );
+          Navigator.of(context).pop();
+        }
+      },
+    );
+
+    final state = ref.watch(authControllerProvider);
 
     return AuthLayout(
       formKey: _formKey,
@@ -84,20 +124,6 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
             hintText: 'Enter your email',
             prefixIcon: Icons.mail_outline,
             keyboardType: TextInputType.emailAddress,
-            validator: AppValidators.validateEmail,
-          ),
-                  
-          const SizedBox(
-            height: AppSpacing.lg,
-          ),
-                  
-          AuthTextField(
-            controller: _emailController,
-            label: 'Email',
-            hintText: 'Enter your email',
-            prefixIcon: Icons.mail_outline,
-            keyboardType: TextInputType.emailAddress,
-            textInputAction: TextInputAction.next,
             validator: AppValidators.validateEmail,
           ),
                   
@@ -146,9 +172,9 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
           const SizedBox(height: AppSpacing.sm),
                   
           AuthButton(
-            onPressed: _acceptedTerms ? _register : null,
+            onPressed: state.isLoading ? null : _register,
             label: 'Create account',
-            isLoading: _isLoading,
+            isLoading: state.isLoading,
           ),
                   
           const SizedBox(height: AppSpacing.xl),
@@ -156,7 +182,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
           AuthBottom(
             mainText: 'Already have an account?',
             subText: 'Log in',
-            onPressed: _isLoading ? null : () => Navigator.of(context).pop(),
+            onPressed: state.isLoading ? null : () => Navigator.of(context).pop(),
           ),
         ]
       ),

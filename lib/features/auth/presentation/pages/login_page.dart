@@ -3,12 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:task_manager/core/theme/app_spacing.dart';
 import 'package:task_manager/core/validators/app_validators.dart';
 import 'package:task_manager/features/auth/presentation/pages/register_page.dart';
+import 'package:task_manager/features/auth/presentation/providers/auth_providers.dart';
 import 'package:task_manager/features/auth/presentation/widgets/auth_bottom.dart';
 import 'package:task_manager/features/auth/presentation/widgets/auth_button.dart';
 import 'package:task_manager/features/auth/presentation/widgets/auth_branding.dart';
 import 'package:task_manager/features/auth/presentation/widgets/auth_heading.dart';
 import 'package:task_manager/features/auth/presentation/widgets/auth_layout.dart';
 import 'package:task_manager/features/auth/presentation/widgets/auth_text_field.dart';
+import 'package:task_manager/widgets/app_snackbar.dart';
 
 /// A login page for the Smart Task Manager application.
 /// 
@@ -45,10 +47,42 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     if (!(_formKey.currentState?.validate() ?? false)) {
       return;
     }
+
+    await ref.read(authControllerProvider.notifier).login(
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
+        );
   }
 
   @override
   Widget build(BuildContext context) {
+    // Listen to the authentication controller state to handle loading and error states.
+    ref.listen<AsyncValue<void>>(
+      authControllerProvider,
+      (previous, next) {
+        // Error
+        if (next.hasError && !next.isLoading) {
+          AppSnackbar.error(
+            context,
+            next.error.toString(),
+          );
+        }
+
+        // Success
+        if (previous?.isLoading == true &&
+            next.hasValue &&
+            !next.isLoading) {
+          AppSnackbar.success(
+            context,
+            'Login successful',
+          );
+        }
+      },
+    );
+
+    final state = ref.watch(authControllerProvider);
+
+    final isLoading = state.isLoading;
 
     return AuthLayout(
       formKey: _formKey,
@@ -101,9 +135,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           const SizedBox(height: AppSpacing.sm),
       
           AuthButton(
-            onPressed: _login,
+            onPressed: isLoading ? null : _login,
             label: 'Login',
-            isLoading: false,
+            isLoading: isLoading,
           ),
       
           const SizedBox(height: AppSpacing.xl),
