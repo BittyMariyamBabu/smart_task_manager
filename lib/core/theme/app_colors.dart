@@ -22,6 +22,7 @@ abstract final class AppColors {
   static const darkBackground = Color(0xFF0B0F14);
   static const darkSurface = Color(0xFF121820);
   static const darkSurfaceVariant = Color(0xFF171E27);
+  static const darkElevatedSurface = Color(0xFF1C2530);
 
   static const darkTextPrimary = Color(0xFFF5F7FA);
   static const darkTextSecondary = Color(0xFF9AA6B2);

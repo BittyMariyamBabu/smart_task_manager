@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager/core/theme/app_theme.dart';
+import 'package:task_manager/features/auth/presentation/pages/login_page.dart';
 
 Future<void> main() async {
   // Ensure that the Flutter framework is initialized before running the app
@@ -23,16 +24,7 @@ class MyApp extends StatelessWidget {
 
       themeMode: ThemeMode.system,
 
-      home: const MainNavigation(),
+      home: const LoginPage(),
     );
-  }
-}
-
-class MainNavigation extends StatelessWidget {
-  const new({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
   }
 }
