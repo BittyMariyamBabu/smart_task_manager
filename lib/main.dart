@@ -1,16 +1,25 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:task_manager/core/theme/app_theme.dart';
-import 'package:task_manager/features/auth/presentation/pages/login_page.dart';
 import 'package:task_manager/features/onboarding/presentation/pages/onboarding_page.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'firebase_options.dart';
 
 Future<void> main() async {
-  // Ensure that the Flutter framework is initialized before running the app
   WidgetsFlutterBinding.ensureInitialized();
 
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(
-    const MyApp(),
+    const ProviderScope(
+      child: MyApp(),
+    ),
   );
 }
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
