@@ -26,6 +26,12 @@ abstract final class AppValidators {
     return null;
   }
 
+    /// Validates a required name field.
+  static String? validate(String? value) {
+    if ((value?.trim() ?? '').isEmpty) return 'Enter your value';
+    return null;
+  }
+
   /// Validates that a confirmation password matches the original password.
   static String? confirmPassword(
   String? value,

@@ -51,8 +51,8 @@ class AuthRepository {
       final user = credential.user;
 
       if (user == null) {
-        throw const AppException(
-          'Unable to login. Please try again.',
+        throw AppException(
+          message: 'Unable to login. Please try again.',
         );
       }
 
@@ -62,7 +62,7 @@ class AuthRepository {
       );
     } on FirebaseAuthException catch (e) {
       throw AppException(
-        FirebaseErrorMapper.authError(e),
+        message: FirebaseErrorMapper.authError(e),
       );
     }
   }
@@ -86,8 +86,8 @@ class AuthRepository {
       final user = credential.user;
 
       if (user == null) {
-        throw const AppException(
-          'Unable to create account.',
+        throw AppException(
+          message:'Unable to create account.',
         );
       }
 
@@ -108,11 +108,11 @@ class AuthRepository {
       );
     } on FirebaseAuthException catch (e) {
       throw AppException(
-        FirebaseErrorMapper.authError(e),
+        message:FirebaseErrorMapper.authError(e),
       );
     } on FirebaseException catch (e) {
       throw AppException(
-        e.message ?? 'Unable to create user profile.',
+        message: e.message ?? 'Unable to create user profile.',
       );
     }
   }
@@ -125,7 +125,7 @@ class AuthRepository {
       await _auth.signOut();
     } on FirebaseAuthException catch (e) {
       throw AppException(
-        FirebaseErrorMapper.authError(e),
+        message: FirebaseErrorMapper.authError(e),
       );
     }
   }

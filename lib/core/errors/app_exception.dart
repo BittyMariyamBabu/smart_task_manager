@@ -6,9 +6,15 @@
 /// in a consistent manner.
 class AppException implements Exception {
   final String message;
+  final int? statusCode;
 
-  const AppException(this.message);
+  AppException({
+    required this.message,
+    this.statusCode,
+  });
 
   @override
-  String toString() => message;
+  String toString() {
+    return 'ApiException($statusCode): $message';
+  }
 }

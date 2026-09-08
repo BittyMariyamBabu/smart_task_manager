@@ -14,6 +14,11 @@ final firebaseAuthProvider = Provider<FirebaseAuth>((ref) {
   return FirebaseAuth.instance;
 });
 
+/// Provides the currently authenticated Firebase user.
+final currentFirebaseUserProvider = Provider<User?>((ref) {
+  return ref.watch(firebaseAuthProvider).currentUser;
+});
+
 /// A provider for the AuthRepository instance.
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
   return AuthRepository(
@@ -24,9 +29,7 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
 
 //// A provider that exposes the current authentication state of the user.
 final authStateProvider = StreamProvider<AuthUser?>((ref) {
-  return ref
-      .watch(authRepositoryProvider)
-      .authStateChanges;
+  return ref.watch(authRepositoryProvider).authStateChanges;
 });
 
 /// A provider for the AuthController instance, which manages authentication state and actions.
