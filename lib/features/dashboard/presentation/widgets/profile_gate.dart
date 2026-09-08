@@ -12,7 +12,9 @@ class ProfileGate extends ConsumerWidget {
     final profileState = ref.watch(currentUserProfileProvider);
 
     return profileState.when(
-      loading: () => CircularProgressIndicator(),
+      loading: () => Scaffold(
+        body: Center(child: CircularProgressIndicator())
+      ),
 
       error: (error, stackTrace) {
         return ErrorPage(

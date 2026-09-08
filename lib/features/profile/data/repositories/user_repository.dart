@@ -31,7 +31,7 @@ class UserProfileRepository {
       );
     } on FirebaseException catch (e) {
       throw AppException(
-        e.message ?? 'Unable to fetch user profile.',
+        message: e.message ?? 'Unable to fetch user profile.',
       );
     }
   }
@@ -52,7 +52,7 @@ class UserProfileRepository {
       });
     } on FirebaseException catch (e) {
       throw AppException(
-        e.message ?? 'Unable to update profile.',
+        message: e.message ?? 'Unable to update profile.',
       );
     }
   }
@@ -71,7 +71,7 @@ class UserProfileRepository {
       });
     } on FirebaseException catch (e) {
       throw AppException(
-        e.message ?? 'Unable to update theme.',
+        message: e.message ?? 'Unable to update theme.',
       );
     }
   }

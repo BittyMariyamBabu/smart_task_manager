@@ -14,6 +14,11 @@ final firebaseAuthProvider = Provider<FirebaseAuth>((ref) {
   return FirebaseAuth.instance;
 });
 
+/// Provides the currently authenticated Firebase user.
+final currentFirebaseUserProvider = Provider<User?>((ref) {
+  return ref.watch(firebaseAuthProvider).currentUser;
+});
+
 /// A provider for the AuthRepository instance.
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
   return AuthRepository(

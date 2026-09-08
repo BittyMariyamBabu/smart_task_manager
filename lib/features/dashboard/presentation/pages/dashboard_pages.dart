@@ -7,6 +7,7 @@ import 'package:task_manager/features/dashboard/presentation/widgets/dashboard_h
 import 'package:task_manager/features/dashboard/presentation/widgets/recent_task.dart';
 import 'package:task_manager/features/profile/presentation/pages/profile_page.dart';
 import 'package:task_manager/features/profile/data/models/user_model.dart';
+import 'package:task_manager/features/task/presentation/pages/task_page.dart';
 
 /// A dashboard page that displays the user's profile information, total tasks, task status, and recent tasks.
 class DashboardPage extends ConsumerWidget {
@@ -76,11 +77,11 @@ class DashboardPage extends ConsumerWidget {
 
                   TextButton(
                     onPressed: () {
-                      // Navigator.of(context).push(
-                      //   MaterialPageRoute(
-                      //     builder: (_) => const TaskPage(),
-                      //   ),
-                      // );
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => const TaskPage(),
+                        ),
+                      );
                     },
                     child: const Text('View All'),
                   ),
@@ -136,11 +137,11 @@ class DashboardPage extends ConsumerWidget {
       floatingActionButton: FloatingActionButton(
         tooltip: 'Add Task',
         onPressed: () {
-          // Navigator.of(context).push(
-          //   MaterialPageRoute(
-          //     builder: (_) => const TaskPage(),
-          //   ),
-          // );
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => const TaskPage(),
+            ),
+          );
         },
         child: const Icon(Icons.add),
       ),
