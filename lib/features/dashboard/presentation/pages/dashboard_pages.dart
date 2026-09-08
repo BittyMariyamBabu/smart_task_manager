@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:task_manager/features/auth/presentation/providers/auth_providers.dart';
+import 'package:task_manager/core/theme/app_spacing.dart';
+import 'package:task_manager/features/dashboard/presentation/widgets/task_status.dart';
+import 'package:task_manager/features/dashboard/presentation/widgets/total_task_card.dart';
+import 'package:task_manager/features/dashboard/presentation/widgets/dashboard_header.dart';
+import 'package:task_manager/features/dashboard/presentation/widgets/recent_task.dart';
+import 'package:task_manager/features/profile/presentation/pages/profile_page.dart';
 import 'package:task_manager/features/profile/data/models/user_model.dart';
 
+/// A dashboard page that displays the user's profile information, total tasks, task status, and recent tasks.
 class DashboardPage extends ConsumerWidget {
+  /// The user's profile information.
   final UserProfile profile;
 
   const DashboardPage({
@@ -11,60 +18,131 @@ class DashboardPage extends ConsumerWidget {
     required this.profile,
   });
 
-  Future<void> _logout(BuildContext context,WidgetRef ref) async {
-    try {
-      await ref.read(authControllerProvider.notifier).logout();
-    } catch (_) {
-      // Error listener can handle the error.
-    }
-  }
-
   @override
-  Widget build(BuildContext context,WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Dashboard'),
         actions: [
           IconButton(
+            tooltip: 'Profile',
             onPressed: () {
-              _logout(context, ref);
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const ProfilePage(),
+                ),
+              );
             },
-            icon: const Icon(Icons.logout),
+            icon: const Icon(Icons.person_outline),
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Welcome, ${profile.name}',
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+
+              DashboardHeader(
+                name: profile.name,
               ),
-            ),
 
-            const SizedBox(height: 8),
+              const SizedBox(height: AppSpacing.lg),
 
-            Text(profile.email),
-
-            const SizedBox(height: 24),
-
-            Text(
-              'Theme: ${profile.themeMode}',
-            ),
-
-            if (profile.createdAt != null) ...[
-              const SizedBox(height: 8),
-              Text(
-                'Created: ${profile.createdAt}',
+              TotalTasksCard(
+                totalTasks: 12,
               ),
+
+              const SizedBox(height: AppSpacing.md),
+
+              const TaskStatus(),
+
+              const SizedBox(height: AppSpacing.lg),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Recent Tasks',
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge
+                        ?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+
+                  TextButton(
+                    onPressed: () {
+                      // Navigator.of(context).push(
+                      //   MaterialPageRoute(
+                      //     builder: (_) => const TaskPage(),
+                      //   ),
+                      // );
+                    },
+                    child: const Text('View All'),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: AppSpacing.sm),
+
+              // --------------------------------------------------
+              // Recent Task 1
+              // --------------------------------------------------
+
+              const RecentTaskCard(
+                title: 'Finish project',
+                date: 'Today',
+                isCompleted: true,
+              ),
+
+              const SizedBox(height: AppSpacing.sm),
+
+              // --------------------------------------------------
+              // Recent Task 2
+              // --------------------------------------------------
+
+              const RecentTaskCard(
+                title: 'Call client',
+                date: 'Tomorrow',
+                isCompleted: false,
+              ),
+
+              const SizedBox(height: AppSpacing.sm),
+
+              // --------------------------------------------------
+              // Recent Task 3
+              // --------------------------------------------------
+
+              const RecentTaskCard(
+                title: 'Prepare presentation',
+                date: 'Friday',
+                isCompleted: false,
+              ),
+
+              const SizedBox(height: AppSpacing.lg),
             ],
-          ],
+          ),
         ),
+      ),
+
+      // ----------------------------------------------------------
+      // Add Task Button
+      // ----------------------------------------------------------
+
+      floatingActionButton: FloatingActionButton(
+        tooltip: 'Add Task',
+        onPressed: () {
+          // Navigator.of(context).push(
+          //   MaterialPageRoute(
+          //     builder: (_) => const TaskPage(),
+          //   ),
+          // );
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }

@@ -24,9 +24,7 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
 
 //// A provider that exposes the current authentication state of the user.
 final authStateProvider = StreamProvider<AuthUser?>((ref) {
-  return ref
-      .watch(authRepositoryProvider)
-      .authStateChanges;
+  return ref.watch(authRepositoryProvider).authStateChanges;
 });
 
 /// A provider for the AuthController instance, which manages authentication state and actions.

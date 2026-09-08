@@ -36,8 +36,8 @@ class UserProfileRepository {
     }
   }
 
-  /// Create a user profile.
-  Future<void> createUserProfile({
+  /// Update a user profile.
+  Future<void> updateProfile({
     required String uid,
     required String name,
     required String email,
@@ -46,15 +46,13 @@ class UserProfileRepository {
       await _firestore
           .collection(FirestoreConstants.usersCollection)
           .doc(uid)
-          .set({
+          .update({
         'name': name.trim(),
         'email': email.trim(),
-        'createdAt': FieldValue.serverTimestamp(),
-        'themeMode': 'system',
       });
     } on FirebaseException catch (e) {
       throw AppException(
-        e.message ?? 'Unable to create user profile.',
+        e.message ?? 'Unable to update profile.',
       );
     }
   }

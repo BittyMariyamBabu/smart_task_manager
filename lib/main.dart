@@ -5,7 +5,7 @@ import 'package:task_manager/features/auth/presentation/pages/login_page.dart';
 import 'package:task_manager/features/auth/presentation/providers/auth_providers.dart';
 import 'package:task_manager/features/onboarding/presentation/pages/onboarding_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:task_manager/features/dashboard/presentation/pages/profile_gate.dart';
+import 'package:task_manager/features/dashboard/presentation/widgets/profile_gate.dart';
 import 'package:task_manager/widgets/error_page.dart';
 
 import 'firebase_options.dart';

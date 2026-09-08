@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:task_manager/features/dashboard/presentation/pages/dashboard_pages.dart';
-import 'package:task_manager/features/onboarding/presentation/pages/onboarding_page.dart';
 import 'package:task_manager/features/profile/presentation/provider/user_profile_provider.dart';
 import 'package:task_manager/widgets/error_page.dart';
 
